@@ -12,9 +12,9 @@ def global_init(db_file):
     if __factory:
         return
     if not db_file or not db_file.strip():
-        raise Exception('ukajite put k baze dannih')
+        raise Exception('Укажите путь к базе данных')
     connect_str = f"sqlite:///{db_file.strip()}?check_same_thread=False"
-    print(f'podkluchenije k baze dannih po adresu {db_file}')
+    print(f'Подключение к базе данных по адресу {db_file}')
     engine = sa.create_engine(connect_str, echo=True)
     __factory = orm.sessionmaker(bind=engine)
 

@@ -10,14 +10,14 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">наше первое приложение аааааааааааааа</a>
+    <nav class="navbar navbar-light bg-dark">
+        <a class="navbar-brand" href="#">TravelGram</a>
         {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="/logout">{{current_user.name}}</a>
         {% else %}
         <p>
-            <a class="btn btn-primary" href="/register">Zaregistrirovaca</a>
-            <a class="btn btn-success" href="/login">Vojti</a>
+            <a class="btn btn-secondary" href="/register">Зарегистрироваться</a>
+            <a class="btn btn-primary" href="/login">Войти</a>
         </p>
         {% endif %}
     </nav>

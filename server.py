@@ -19,7 +19,7 @@ app = Flask(__name__)
 api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-app.config['SECRET_KEY'] = 'sekret_key_aaaaaaa'
+app.config['SECRET_KEY'] = 'SEKRET_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = dt.timedelta(days=240)
 
 
@@ -39,8 +39,8 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.rememberme.data)
             return redirect('/')
-        return render_template('login.html', message='Nepravilnij login ili parol', form=form)
-    return render_template('login.html', title='Avtorizacija', form=form)
+        return render_template('login.html', message='Неправильный логин или пароль', form=form)
+    return render_template('login.html', title='Авторизация', form=form)
 
 
 @app.route("/logout")
@@ -62,32 +62,16 @@ def index():
     return render_template("index.html", news=news, current_user=current_user)
 
 
-# @app.route("/session_test")
-# def session_test():
-#     visit_count = session.get("visit_count", 0)
-#     session["visit_count"] = visit_count + 1
-#     return make_response(f"Vy prishli {visit_count + 1} raz!")
-# @app.route("/cookie_test")
-# def cookie_test():
-#     visits_count = int(request.cookies.get('visits_test', 0))
-#     if visits_count:
-#         res = make_response(f"Vi prishli na stranicu {visits_count} raz")
-#         res.set_cookie("visits_test", str(visits_count + 1), max_age=60 * 60 * 24 * 365 * 2)
-#     else:
-#         res = make_response(f"Vi prishli pervij raz za 2 goda")
-#         res.set_cookie("visits_test", "1", max_age=60 * 60 * 24 * 365 * 2)
-#     return res
-
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForms()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template("register.html", title="Registration", form=form, message="PAROL NE SOVPADAJET!!!")
+            return render_template("register.html", title="Регистрация", form=form, message="Пароль не совпадает")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template("register.html", title="Registration", form=form,
-                                   message="TAKOJ EMEJL UZHE ISPOLZUJETCA!!!")
+            return render_template("register.html", title="Регистрация", form=form,
+                                   message="Такой email уже используется")
         user = User(
             name=form.name.data,
             email=form.email.data,
@@ -97,7 +81,7 @@ def register():
         db_sess.add(user)
         db_sess.commit()
         return redirect("/login")
-    return render_template("register.html", title="Registration", form=form)
+    return render_template("register.html", title="Регистрация", form=form)
 
 
 @app.route("/news", methods=['GET', 'POST'])
@@ -109,13 +93,14 @@ def add_news():
         news = News()
         news.title = form.title.data
         news.content = form.content.data
+        news.file = news.file.data
         news.is_private = form.is_private.data
+        news.category = news.category.data
         current_user.news.append(news)
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('news.html', title='Dobavlenije novosti', form=form)
-
+    return render_template('news.html', title='Добавление новости', form=form)
 
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -141,7 +126,7 @@ def edit_news(id):
             return redirect('/')
         else:
             abort(404)
-    return render_template('news.html', title='Redaktirovanje novosti', form=form)
+    return render_template('news.html', title='Редактирование новости', form=form)
 
 
 @app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
@@ -162,32 +147,6 @@ def main():
     app.register_blueprint(news_api.blueprint)
     api.add_resource(news_resources.NewsListResource, '/api/g2/news')
     api.add_resource(news_resources.NewsResource, '/api/g2/news/<int:news_id>')
-    # # user = User()
-    # # user.name = 'Gennadij'
-    # # user.about = 'about Gennadij'
-    # # user.email = 'gennadij@gennadij.com'
-    # db_sess = db_session.create_session()
-    # # db_sess.add(user)
-    # # user = db_sess.query(User)
-    # # for user in db_sess.query(User).all():
-    # #     print(user.name)
-    # # db_sess.commit()
-    # #
-    # # db_sess = db_session.create_session()
-    # # user = db_sess.query(User).filter(User.id == 1).first()
-    # # print(user.name)
-    # # user.name = 'user name new'
-    # # user.created_data = dt.datetime.now()
-    # # db_sess.commit()
-    # # db_sess.query(User).filter(User.id >= 3).delete()
-    # # db_sess.commit()
-    #
-
-    # user = db_sess.query(User).filter(User.id == 3).first()
-    # news = News(title='Pervaja zapis', content='mnogo mnogo mnogo texta slova bukvi aaaaaaaaaaa', user=user,
-    #             is_private=False)
-    # user.news.append(news)
-    # db_sess.commit()
     app.run()
 def abort_if_news_not_found(news_id):
     session = db_session.create_session()

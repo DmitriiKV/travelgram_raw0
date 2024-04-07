@@ -37,9 +37,9 @@ def get_one_news(news_id):
 @blueprint.route('/api/news', methods=['POST'])
 def create_news():
     if not request.json:
-        return make_response(jsonify({'error': 'Empty Request (Pustoj Zapros)'}), 400)
+        return make_response(jsonify({'error': 'Empty Request (пустой запрос)'}), 400)
     elif not all(key in request.json for key in ['title', 'content', 'user_id', 'is_private']):
-        return make_response(jsonify({'error': 'Bad Request (Plohoj Zapros)'}), 400)
+        return make_response(jsonify({'error': 'Bad Request (плохой запрос)'}), 400)
     else:
         db_sess = db_session.create_session()
         news = News(

@@ -12,6 +12,7 @@ class News(SqlAlchemyBase, SerializerMixin):
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     title = sa.Column(sa.String, nullable=True)
     content = sa.Column(sa.String, nullable=True)
+    #file = sa.Column(sa.String, nullable=True)
     created_data = sa.Column(sa.DateTime, default=dt.datetime.now)
     is_private = sa.Column(sa.Boolean, default=True)
     is_published = sa.Column(sa.Boolean, default=True)

@@ -1,9 +1,9 @@
 {%extends "base.html"%}
 {%block content%}
-<h1>Zapisi v mojem bloge</h1>
+<h1>Записи в моём блоге</h1>
     <div>
         {% if current_user.is_authenticated %}
-            <a href="news" class="btn btn-secondary">Dobavit novost</a>
+            <a href="news" class="btn btn-secondary">Добавить пост</a>
             {% endif %}
     </div>
     {%for item in news%}
@@ -13,12 +13,12 @@
             {{item.content}}
         </div>
         <div>
-            Avtor - {{item.user.name}}, data napisanja - {{item.created_data}}
+            Автор - {{item.user.name}}, дата - {{item.created_data}}
         </div>
         <div>
             {% if current_user.is_authenticated and current_user == item.user %}
-                <a href="/news/{{item.id}}" class="btn btn-warning">Izmenit</a>
-                <a href="/news_delete/{{item.id}}" class="btn btn-danger">Udalit</a>
+                <a href="/news/{{item.id}}" class="btn btn-warning">Изменить</a>
+                <a href="/news_delete/{{item.id}}" class="btn btn-danger">Удалить</a>
                 {% endif %}
         </div>
     </div>
