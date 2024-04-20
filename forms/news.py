@@ -1,11 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField, FileField
+from flask_wtf.file import FileAllowed
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField, FileField, SelectField
 from wtforms.validators import DataRequired
 
 class NewsForm(FlaskForm):
+    CHOICES = ['еда', 'достопримечательности', 'проживание']
     title = StringField('Заголовок', validators=[DataRequired()])
     content = TextAreaField('Содержание')
-    #file = FileField('Добавить файл')
-    category = TextAreaField('Категория')
+    city = StringField('Город', validators=[DataRequired()])
+    category = StringField('Категории', validators=[DataRequired()])
     is_private = BooleanField('Сделать приватной')
     submit = SubmitField('Сохранить')

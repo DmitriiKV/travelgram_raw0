@@ -1,2 +1,7 @@
-https://lms.yandex.ru/courses/1054/groups/8388/lessons/5973/materials/18926
-и другие видео из sqlalchemy и flask-restful
+https://docs-python.ru/packages/veb-frejmvork-flask-python/flask-sqlalchemy/
+поковырять upload_file и add_news и определиться со способом загрузки картинки,
+поменять везде news на posts
+[v] подключить карту города к городу
+
+посмотреть видео про категории от MIKE DO IT
+подумать над тем как сделать страницу для загрузки файла и прилепить её к эдиту и аду

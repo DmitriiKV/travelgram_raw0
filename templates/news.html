@@ -22,9 +22,9 @@
         {% endfor %}
     </p>
     <p>
-        {{form.file.label}}<br>
-        {{form.content(class="form-control-file")}}<br>
-        {% for error in form.file.errors %}
+        {{form.city.label}}<br>
+        {{form.city(class="form-control")}}<br>
+        {% for error in form.city.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
@@ -40,7 +40,6 @@
         {% endfor %}
     </p>
     <p>{{form.is_private()}}{{form.is_private.label}}</p>
-
     <p>{{form.submit(type="submit", class="btn btn-primary")}}</p>
     {{message}}
 
