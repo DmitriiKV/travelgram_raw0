@@ -4,5 +4,4 @@ Flask-WTF==0.15.0
 Jinja2==2.11.3
 SQLAlchemy==1.4.52
 SQLAlchemy-serializer==1.4.12
-Werkzeug==2.2.3
 WTForms==3.0.1
