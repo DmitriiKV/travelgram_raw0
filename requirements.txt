@@ -7,3 +7,4 @@ SQLAlchemy-serializer==1.4.12
 WTForms==3.0.1
 requests==0.14.0
 markupsafe==2.0.1
+flask-login==0.6.3
