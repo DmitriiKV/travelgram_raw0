@@ -28,6 +28,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = dt.timedelta(days=240)
 UPLOAD_FOLDER = 'static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# обработчик адреса, отображающего карту города, указанного пользователем
 @app.route('/cities/<city>', methods=['GET', 'POST'])
 def show_city(city):
     geocoder_request = f'http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={city}&format=json'
@@ -40,16 +41,13 @@ def show_city(city):
     map_request = f"http://static-maps.yandex.ru/1.x/?ll={height},{width}&spn=0.1,0.1&l=map"
     return redirect(map_request)
 
+# функция для получения пользователя
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
-# @login_manager
-# def load_category(category_id):
-#     db_sess = db_session.create_session()
-#     return db_sess.query(Category).get(category_id)
-
+# обработчик адреса /login
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -63,27 +61,27 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+# обработчик адреса /are_you_logout
 @app.route("/are_you_logout")
 @login_required
 def are_you_logout():
     return render_template('are_you_logout.html')
 
-
+# обработчик адреса /logout
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect('/')
 
-@app.route("/news/<string:category_str>", methods=['GET', 'POST'])
-@login_required
+# обработчик адреса, отображающего посты одной категории
+@app.route("/<string:category_str>", methods=['GET', 'POST'])
 def category(category_str):
     db_sess = db_session.create_session()
-    news_category = db_sess.query(News).filter_by(category=category_str).all()
-    current_category = db_sess.query(News).filter_by(category=category_str).first()
-    return render_template('category.html', news_category=news_category, current_category=current_category, title=f"Посты в категории {current_category}")
+    news = db_sess.query(News).filter(News.category == category_str)
+    return render_template("index.html", news=news, current_user=current_user)
 
-
+# обработчик адреса главной страницы
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
@@ -95,7 +93,7 @@ def index():
         news = db_sess.query(News).filter(News.is_private != True)
     return render_template("index.html", news=news, current_user=current_user)
 
-
+# обработчик адреса /register
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForms()
@@ -117,6 +115,7 @@ def register():
         return redirect("/login")
     return render_template("register.html", title="Регистрация", form=form)
 
+# обработчик адреса /news для добавления новости
 @app.route("/news", methods=['GET', 'POST'])
 @login_required
 def add_news():
@@ -139,11 +138,12 @@ def add_news():
     return render_template('news.html', title='Добавление поста', form=form)
 
 
+# обработчик адреса страницы для загрузки фото
 @app.route('/file/<int:id>')
 def file(id):
     return render_template('image_render.html', item_id=id)
 
-
+# обработчик адреса страницы для загрузки фото
 @app.route('/upload/<int:id>', methods=['POST'])
 @login_required
 def upload_file(id):
@@ -164,7 +164,7 @@ def upload_file(id):
     db_sess.commit()
     return redirect('/')
 
-
+# обработчик адреса для редактирования новости
 @app.route('/news/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_news(id):
@@ -199,7 +199,7 @@ def edit_news(id):
             abort(404)
     return render_template('news.html', title='Редактирование поста', form=form)
 
-
+# обработчик адреса для удаления новости
 @app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def news_delete(id):
@@ -212,7 +212,7 @@ def news_delete(id):
         abort(404)
     return redirect('/')
 
-
+# основная функция приложения
 def main():
     db_session.global_init("db/blog_db.sqlite")
     app.register_blueprint(news_api.blueprint)
@@ -220,14 +220,14 @@ def main():
     api.add_resource(news_resources.NewsResource, '/api/g2/news/<int:news_id>')
     app.run()
 
-
+# функция для обработки ошибки 404
 def abort_if_news_not_found(news_id):
     session = db_session.create_session()
     news = session.query(News).get(news_id)
     if not news:
         abort(404, message=f'News {news_id} not found')
 
-
+# функция для обработки ошибки 400
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
