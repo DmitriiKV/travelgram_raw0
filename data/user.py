@@ -3,10 +3,11 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
-
 from .db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+# класс для работы с таблицей пользователей
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'user'
 
@@ -23,4 +24,3 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
-

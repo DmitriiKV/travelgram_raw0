@@ -1,3 +1,5 @@
+# оболочка RESTful-сервиса
+
 from flask import jsonify
 
 from data import db_session

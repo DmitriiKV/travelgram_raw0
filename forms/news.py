@@ -3,6 +3,8 @@ from flask_wtf.file import FileAllowed
 from wtforms import StringField, TextAreaField, BooleanField, SubmitField, FileField, SelectField
 from wtforms.validators import DataRequired
 
+
+# класс для формы новостей
 class NewsForm(FlaskForm):
     CHOICES = ['еда', 'достопримечательности', 'проживание']
     title = StringField('Заголовок', validators=[DataRequired()])

@@ -1,3 +1,4 @@
+# файл для rest-api
 import flask
 from flask import jsonify, make_response, request
 

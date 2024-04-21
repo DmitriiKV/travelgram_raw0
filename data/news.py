@@ -2,10 +2,10 @@ import datetime as dt
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy_serializer import SerializerMixin
-
 from .db_session import SqlAlchemyBase
 
 
+# класс для работы с таблицей новостей
 class News(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'news'
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)

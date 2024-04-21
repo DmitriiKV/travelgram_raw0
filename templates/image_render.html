@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Загрузка файла</title>
-</head>
-<body>
-    <h1>Загрузка файла на сервер</h1>
+<!--шаблон страницы загрузки изображения-->
+{%extends "base.html"%}
+{%block content%}
+    <h1>Загрузите файл с изображением</h1>
     <form method="POST" enctype="multipart/form-data" action="/upload/{{item_id}}">
         <input type="file" name="file">
         <input type="submit" value="Загрузить">
     </form>
-</body>
-</html>
+{% endblock %}
